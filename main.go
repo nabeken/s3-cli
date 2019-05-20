@@ -87,6 +87,10 @@ func main() {
 			Name:  "no-check-md5",
 			Usage: "Do not check MD5 sums when comparing files for [sync] (default).",
 		},
+		cli.BoolFlag{
+			Name:  "follow-sdk",
+			Usage: "Follow aws-sdk-go's default behavior for the credentials.",
+		},
 	}
 
 	// The wrapper to launch a command -- take care of standard setup

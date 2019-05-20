@@ -51,10 +51,14 @@ func SessionNew(config *Config) *s3.S3 {
 		sessionConfig.EndpointResolver = buildEndpointResolver(config.HostBase)
 	}
 
-	return s3.New(session.Must(session.NewSessionWithOptions(session.Options{
-		Config:            sessionConfig,
+	opt := session.Options{
 		SharedConfigState: session.SharedConfigEnable,
-	})))
+	}
+	if !config.FollowSDK {
+		opt.Config = sessionConfig
+	}
+
+	return s3.New(session.Must(session.NewSessionWithOptions(opt)))
 }
 
 // SessionForBucket - For a given S3 bucket, create an approprate session that references the region
@@ -79,8 +83,12 @@ func SessionForBucket(config *Config, bucket string) (*s3.S3, error) {
 		sessionConfig.EndpointResolver = buildEndpointResolver(host)
 	}
 
-	return s3.New(session.Must(session.NewSessionWithOptions(session.Options{
-		Config:            sessionConfig,
+	opt := session.Options{
 		SharedConfigState: session.SharedConfigEnable,
-	}))), nil
+	}
+	if !config.FollowSDK {
+		opt.Config = sessionConfig
+	}
+
+	return s3.New(session.Must(session.NewSessionWithOptions(opt))), nil
 }

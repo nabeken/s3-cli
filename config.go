@@ -17,6 +17,8 @@ import (
 // Command lines are by default the snake case version of the the struct names with "-" instead of "_"
 //
 type Config struct {
+	FollowSDK bool
+
 	AccessKey    string `ini:"access_key"`
 	SecretKey    string `ini:"secret_key"`
 	StorageClass string `ini:"storage-class"`
@@ -82,6 +84,8 @@ func NewConfig(c *cli.Context) (*Config, error) {
 	if _, found := validStorageClasses[config.StorageClass]; !found {
 		return nil, fmt.Errorf("Invalid storage class provided: %s", config.StorageClass)
 	}
+
+	config.FollowSDK = c.GlobalIsSet("follow-sdk")
 
 	return config, nil
 }
